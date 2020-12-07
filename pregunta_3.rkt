@@ -1,0 +1,43 @@
+#lang scheme
+;;(oru lista op)
+;;La función recibe una lista de dos elementos y un operador que corresponde a and, or o xor,
+;;devuelve de el resultado de aplicar dicho operador a la lista.
+;;Retorna un 1 si el resultado es verdadero y un 0 si es falso.
+(define (oru lista op)
+  (define res #t)
+  (cond
+    ((eq? op 'A)(if (= (car lista) 1)
+                     (if (= (cadr lista) 1)
+                         (set! res (and #t #t))
+                         (set! res (and #t #f)))
+                     (if (= (cadr lista) 1)
+                         (set! res (and #f #t))
+                         (set! res (and #f #f)))))
+    ((eq? op 'O)(if (= (car lista) 1)
+                     (if (= (cadr lista) 1)
+                         (set! res (or #t #t))
+                         (set! res (or #t #f)))
+                     (if (= (cadr lista) 1)
+                         (set! res (or #f #t))
+                         (set! res(or #f #f)))))
+     ((eq? op 'X)(if (= (car lista) 1)
+                     (if (= (cadr lista) 1)
+                         (set! res (xor #t #t))
+                         (set! res (xor #t #f)))
+                     (if (= (cadr lista) 1)
+                         (set! res (xor #f #t))
+                         (set! res (xor #f #f)))))
+  )
+  (if res
+      1
+      0)
+)
+(define (oruga expr)
+  (let oruga ((op (car expr))(resultado '())(par '())(lista (cadadr expr)))
+    (if (null? lista)
+        (append resultado (list (oru par op)))
+        (if (= 2 (length par))
+            (oruga op (append resultado (list (oru par op)))(remove (car par) par) lista)
+            (oruga op resultado (append par (list (car lista)))(remove (car lista) lista))))
+   )
+)
